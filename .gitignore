@@ -1,3 +1,7 @@
 
 be/.env
 be/node_modules
+.env.development
+
+
+.env.production

@@ -12,6 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "WisdomAI backend is running"
+  });
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 const PORT = 3000;
 
 const EMBEDDING_MODEL = "Xenova/gte-small";
@@ -31,20 +42,35 @@ const ai = new GoogleGenAI({
 });
 
 // ========================================
-// Load embedding model
+// Load embedding model on demand
 // ========================================
 
-let extractor;
+let extractorPromise;
 
-async function loadEmbeddingModel() {
-  console.log("Loading embedding model...");
+async function getEmbeddingModel() {
+  if (!extractorPromise) {
+    extractorPromise = pipeline(
+      "feature-extraction",
+      EMBEDDING_MODEL
+    ).catch((error) => {
+      // Allow a later request to retry after a failed load.
+      extractorPromise = null;
+      throw error;
+    });
+  }
 
-  extractor = await pipeline(
-    "feature-extraction",
-    EMBEDDING_MODEL
-  );
+  return extractorPromise;
+}
 
-  console.log("Embedding model loaded.");
+async function generateEmbedding(text) {
+  const extractor = await getEmbeddingModel();
+
+  const output = await extractor(text, {
+    pooling: "mean",
+    normalize: true
+  });
+
+  return Array.from(output.data);
 }
 
 // ========================================
@@ -273,22 +299,19 @@ app.post("/api/guidance", async (req, res) => {
   }
 });
 
+
+
 // ========================================
-// Start server
+// Export app for Vercel
 // ========================================
 
-async function startServer() {
+module.exports = app;
 
-  await loadEmbeddingModel();
+// Run a persistent server when developing locally.
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
 
   app.listen(PORT, () => {
-
-    console.log("");
-    console.log("================================");
-    console.log("Spiritual Guidance API running");
-    console.log(`http://localhost:${PORT}`);
-    console.log("================================");
+    console.log(`WisdomAI API running on port ${PORT}`);
   });
 }
-
-startServer();

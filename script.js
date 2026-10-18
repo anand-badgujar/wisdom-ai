@@ -312,11 +312,7 @@ function displayVerse(
 // ========================================
 
 // const BACKEND_URL = "http://localhost:3000";
-const BACKEND_URL =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000"
-    : "https://wisdom-ai-be-lime.vercel.app";
+const BACKEND_URL ="https://wisdom-ai-be-lime.vercel.app";
 
 document
     .getElementById("searchForm")

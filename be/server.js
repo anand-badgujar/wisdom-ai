@@ -77,7 +77,9 @@ async function getEmbeddingModel() {
 // Generate query embedding
 // ========================================
 
+
 async function generateEmbedding(text) {
+  const extractor = await getEmbeddingModel();
 
   const output = await extractor(text, {
     pooling: "mean",
@@ -86,6 +88,7 @@ async function generateEmbedding(text) {
 
   return Array.from(output.data);
 }
+
 
 // ========================================
 // Search Gita

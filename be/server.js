@@ -4,7 +4,9 @@ const express = require("express");
 const cors = require("cors");
 
 const { GoogleGenAI } = require("@google/genai");
-const { pipeline } = require("@huggingface/transformers");
+const { pipeline, env } = require("@huggingface/transformers");
+
+env.cacheDir = "/tmp/transformers-cache";
 const { createClient } = require("@supabase/supabase-js");
 
 const app = express();

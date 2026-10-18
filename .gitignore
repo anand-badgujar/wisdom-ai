@@ -2,6 +2,6 @@
 be/.env
 be/node_modules
 .env.development
-
+config.js
 
 .env.production

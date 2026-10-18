@@ -4,4 +4,4 @@ const isLocalhost =
 
 const BACKEND_URL = isLocalhost
     ? "http://localhost:3000"
-    : "https://YOUR-BACKEND.vercel.app";
+    : "https://wisdom-ai-be-lime.vercel.app/";

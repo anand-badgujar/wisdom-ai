@@ -62,16 +62,16 @@ async function getEmbeddingModel() {
   return extractorPromise;
 }
 
-async function generateEmbedding(text) {
-  const extractor = await getEmbeddingModel();
+// async function generateEmbedding(text) {
+//   const extractor = await getEmbeddingModel();
 
-  const output = await extractor(text, {
-    pooling: "mean",
-    normalize: true
-  });
+//   const output = await extractor(text, {
+//     pooling: "mean",
+//     normalize: true
+//   });
 
-  return Array.from(output.data);
-}
+//   return Array.from(output.data);
+// }
 
 // ========================================
 // Generate query embedding
